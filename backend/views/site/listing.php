@@ -4,6 +4,8 @@
 
 use yii\grid\GridView;
 use yii\data\ArrayDataProvider;
+use yii\grid\ActionColumn;
+use yii\helpers\Html;
 $this->title = 'My Yii Application';
 
 $data = [
@@ -17,9 +19,10 @@ $provider = new ArrayDataProvider([
         'pageSize' => 10,
     ],
     'sort' => [
-        'attributes' => ['id', 'name'],
+        'attributes' => ['type','date'],
     ],
 ]);
+const TEMPLATE ='<div class="table-responsive m-b-40">{summary}{items}<nav class="pt-2">{pager}</nav></div>';
 ?>
     <div class="col-md-12 m-t-25">
     <div class="table-data__tool">
@@ -57,25 +60,46 @@ $provider = new ArrayDataProvider([
                                     </div>
                                 </div>
 
-                                <div class="table-responsive m-b-40">
 
-                                <?= GridView::widget([
+<?= 
+GridView::widget([
     'dataProvider' => $provider,
-    'emptyCell'=>'NA',
+    'layout'=>TEMPLATE,
+    'emptyCell'=>'-',
     'tableOptions'=>['class'=>'table table-borderless table-striped table-earning'],
+    'pager'=>[
+        'linkContainerOptions'=>['class'=>'page-item'],
+        'linkOptions'=>['class'=>'page-link'],
+        'options' => [
+        'class' => 'pagination  pull-right pt-2',
+    ]],
     'columns' => [
         'date',
         'type',
         'description',
         'status',
-        'price'
-       
+        'price',
+            [
+             'class' => ActionColumn::className(),
+             'header'=>'Action',
+             'template' => '{view} {update} {delete}{link}',
+            //  'buttons' => [
+            //     'update' => function ($url,$model) {
+            //         return Html::a(
+            //             '<span class="glyphicon glyphicon-user"></span>', 
+            //             $url);
+            //     },
+            //     // 'link' => function ($url,$model,$key) {
+            //     //     return Html::a('Action', $url);
+            //     // },
+	     
+            //  ],
+            ]
     ],
-]) ?>
-                    
-                                </div>
+]);                                                                         
+?>
+
+</div>
 
 </div>
 </div>
-
-
