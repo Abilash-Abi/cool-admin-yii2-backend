@@ -7,6 +7,8 @@ run - php init
 
 Step 2:
 composer update, If you don't have composer, Install it 
+
+
 Step 3:
 create db with name 'cool-admin' or anything you like. configure it on common/config/main-local.php
 
