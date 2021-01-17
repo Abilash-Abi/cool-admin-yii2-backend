@@ -39,6 +39,8 @@ $this->registerJsFile('@web/backend/files/vendor/jquery-3.2.1.min.js');
                             </a>
                         </div>
 
+                     <?=Yii::$app->controller->renderpartial('@app/views/layouts/_alerts')?>
+
                         <div class="login-form">
                             <?=$content?>
                         </div>
