@@ -101,17 +101,11 @@ $this->registerJsFile('@web/backend/web/files/vendor/jquery-3.2.1.min.js');
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="overview-wrap">
-                                    <h2 class="title-1">overview</h2>
+                                    <h2 class="title-1"><?=$this->title?></h2>
                             </div>
                         </div>
                         <?=$content?>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="copyright">
-                                    <p>Copyright © 2018 Colorlib. All rights reserved. Template by <a href="https://colorlib.com">Colorlib</a>.</p>
-                                </div>
-                            </div>
-                        </div>
+                        <?=Yii::$app->controller->renderpartial('@app/views/layouts/_footer'); ?>
                     </div>
                 </div>
             </div>

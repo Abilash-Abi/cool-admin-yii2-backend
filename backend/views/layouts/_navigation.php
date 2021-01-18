@@ -23,9 +23,16 @@ $navigations = [
     [
         'label'=>'Dashboard', 'icon'=>'fas fa-tachometer-alt', 'url'=>'#','visible'=>1,
             'active'=>['site/login'],
+    ],
+    [
+        'label'=>'Admin Users', 'icon'=>'fas fa-users', 'url'=>'#','visible'=>1,
+            'active'=>['user-roles/index'],
         'submenu'=>[
-                ['label'=>'Dashboard', 'icon'=>'fas fa-tachometer-alt', 'url'=>['site/index'],'visible'=>1,
-                'active'=>['site/test']]
+                ['label'=>'Users', 'icon'=>'fas fa-user', 'url'=>['site/index'],'visible'=>1,
+                'active'=>['site/test']],
+                
+                ['label'=>'User Roles', 'icon'=>'fas fa-tachometer-alt', 'url'=>['user-roles/index'],'visible'=>1,
+                'active'=>['user-roles/index']]
         ],
     ],
         ['label'=>'Listing', 'icon'=>'fas fa-tachometer-alt', 'url'=>['site/listing'],'visible'=>1,'active'=>['site/listing']],
