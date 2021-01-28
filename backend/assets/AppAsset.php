@@ -4,6 +4,7 @@ namespace backend\assets;
 
 use yii\web\AssetBundle;
 use yii\web\YiiAsset;
+use Yii;
 /**
  * Main backend application asset bundle.
  */
@@ -33,6 +34,7 @@ class AppAsset extends AssetBundle
         'vendor/select2/select2.min.css',
         'vendor/perfect-scrollbar/perfect-scrollbar.css',
         // 'vendor/vector-map/jqvmap.min.css',
+        'https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css',
     
     // Main CSS
         'css/theme.css',
@@ -59,16 +61,37 @@ class AppAsset extends AssetBundle
         // 'vendor/vector-map/jquery.vmap.min.js',
         // 'vendor/vector-map/jquery.vmap.sampledata.js',
         // 'vendor/vector-map/jquery.vmap.world.js',
-    
+    'https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js',
     // //  Main JS
         'js/main.js'
     ];
    
-   
-   
-    // public $depends = [
-    //     'yii\web\JqueryAsset',
-    //     'yii\web\YiiAsset',
-    //     'yii\bootstrap\BootstrapAsset',
-    // ];
+    public function __construct(){
+        $route = Yii::$app->controller->route;
+
+        $needToast = [
+            'user-roles/index'
+        ];
+
+        $needConfirm = [
+            'user-roles/index'
+        ];
+
+         // Toast Select picker js and css
+         if(in_array($route,$needToast)){
+            $this->css[] = 'css/jquery.toast.min.css';
+            
+            $this->js[] = 'js/jquery.toast.min.js';
+            $this->js[] = 'js/toast.js';
+        }
+
+         // Confirm Select picker js and css
+         if(in_array($route,$needConfirm)){
+            $this->css[] = 'css/jquery-confirm.min.css';
+            
+            $this->js[] = 'js/jquery-confirm.min.js';
+        }
+    
+    }
+
 }
