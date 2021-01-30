@@ -1,7 +1,8 @@
 <?php
 
 namespace common\models;
-
+use yii\db\Expression;
+use yii\behaviors\TimestampBehavior;
 use Yii;
 
 /**
@@ -33,6 +34,19 @@ class AdminRoles extends \yii\db\ActiveRecord
     const STATUS      = 'status';
     const STRING_NAME = 'string'; 
     public $dateTime = 'Y-m-d H:s:i';
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => self::CREATED_ON,
+                'updatedAtAttribute' => self::MODIFIED_ON,
+                'value' => new Expression('NOW()'),
+            ],
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -47,7 +61,7 @@ class AdminRoles extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [[self::ROLE_NAME, self::CREATED_ON, self::CREATED_BY, self::CREATED_IP, self::MODIFIED_ON, self::MODIFIED_BY, self::MODIFIED_IP, self::STATUS], 'required'],
+            [[self::ROLE_NAME,self::CREATED_BY, self::CREATED_IP, self::MODIFIED_BY, self::MODIFIED_IP, self::STATUS], 'required'],
             [[self::CREATED_ON, self::MODIFIED_ON], 'safe'],
             [[self::CREATED_BY, self::MODIFIED_BY], 'integer'],
             [self::ROLE_NAME,'match','pattern'=>'/^[a-zA-Z-_\s]*$/i', 'message' => 'Invalid characters in Role Name.'],

@@ -5,10 +5,13 @@
 /* @var $model \common\models\LoginForm */
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
+use common\libraries\CommonHtml;
 
 $this->title = 'User Roles';
-$this->params['breadcrumbs'][] = $this->title;
+$this->params['breadcrumbs'][] = CommonHtml::bl($this->title,Url::to(['user-roles/index']));
+$this->params['breadcrumbs'][] = $model->isNewRecord ? 'Add' : 'Update';
 ?>
 
 <div class="col-md-12 m-t-25">
@@ -24,14 +27,12 @@ $this->params['breadcrumbs'][] = $this->title;
                echo '</div>
                         <div class="card-footer">';
                             echo Html::submitButton('<i class="fa fa-dot-circle-o"></i> Submit', ['class' => 'btn btn-primary btn-sm mr-1']);
-                            echo Html::resetButton('<i class="fa fa-ban"></i> Reset', ['class' => 'btn btn-danger btn-sm mr-1']);
-                            echo Html::a('<i class="fa fa-angle-left"></i> Back',$this->context->returnUrl, ['class' => 'btn btn-info btn-sm mr-1']);
+                            echo $model->isNewRecord ? Html::resetButton('<i class="fa fa-ban"></i> Reset', ['class' => 'btn btn-danger btn-sm mr-1']) : '';
+                            echo Html::a('<i class="fa fa-angle-left"></i> Back',$this->context->indexUrl, ['class' => 'btn btn-info btn-sm mr-1']);
 
                 echo '</div>';
                 ActiveForm::end();
             ?>
         </div>
     </div>
-</div>
-
 </div>

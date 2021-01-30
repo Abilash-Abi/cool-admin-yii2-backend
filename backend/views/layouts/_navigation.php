@@ -2,7 +2,7 @@
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\widgets\Menu;
-
+use common\components\PermissionControl;
 const MAIN_MENU_TEMPLATE =  "\n<ul class='list-unstyled navbar__sub-list js-sub-list'>\n{items}\n</ul>\n";
 const SUB_MENU_TEMPLATE ='<a class="js-arrow" href="{url}">{label}<span class="arrow"><i class="fas fa-angle-down"></i></span></a>';
 
@@ -19,19 +19,21 @@ const MENU_LABEL = '<i class="%s"></i>%s';
  * visible -> Decide the menu visible or not
  */
 
+ $adminUsers = PermissionControl::isAllowed(MANAGE_ADMIN_USERS,'view');
+ $adminUserRoles = PermissionControl::isAllowed(MANAGE_USER_ROLES,'view');
 $navigations = [
     [
         'label'=>'Dashboard', 'icon'=>'fas fa-tachometer-alt', 'url'=>'#','visible'=>1,
             'active'=>['site/login'],
     ],
     [
-        'label'=>'Admin Users', 'icon'=>'fas fa-users', 'url'=>'#','visible'=>1,
+        'label'=>'Admin Users', 'icon'=>'fas fa-users', 'url'=>'#','visible'=>$adminUsers || $adminUserRoles,
             'active'=>['user-roles/index'],
         'submenu'=>[
-                ['label'=>'Users', 'icon'=>'fas fa-user', 'url'=>['site/index'],'visible'=>1,
+                ['label'=>'Users', 'icon'=>'fas fa-user', 'url'=>['admin-users/index'],'visible'=>$adminUsers,
                 'active'=>['site/test']],
                 
-                ['label'=>'User Roles', 'icon'=>'fas fa-tachometer-alt', 'url'=>['user-roles/index'],'visible'=>1,
+                ['label'=>'User Roles', 'icon'=>'fas fa-tachometer-alt', 'url'=>['user-roles/index'],'visible'=>$adminUserRoles,
                 'active'=>['user-roles/index']]
         ],
     ],

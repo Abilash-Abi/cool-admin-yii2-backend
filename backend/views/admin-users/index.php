@@ -8,7 +8,7 @@ use yii\grid\ActionColumn;
 use yii\helpers\Html;
 use common\libraries\CommonHtml;
 use common\models\AdminRoles;
-$this->title = 'User Roles';
+$this->title = 'Admin Users';
 $this->params['breadcrumbs'][] = $this->title;
 
 
@@ -43,19 +43,22 @@ $provider = new ActiveDataProvider([
 $columns =  [
     ['class' => 'yii\grid\SerialColumn'],
    [
-       'label'=>'Role Name',
-       'value'=>'role_name'
+       'label'=>'Name',
+       'value'=>'name'
    ],
+   [
+    'label'=>'Email',
+    'value'=>'email'
+    ],
+    [
+        'label'=>'Role',
+        'value'=>'adminRoles.name'
+    ],
  
     [
         'label'=>'status',
         'format'=>'raw',
         'value'=>function($model) { return CommonHtml::statusButton($model->status,$model->id,AdminRoles::class); }
-    ],
-    [
-        'label'=>'Permissions',
-        'format'=>'raw',
-        'value'=>function($model) { return '<a href="'.Url::to(['user-roles/privileges','id'=>$model->id]).'"><span class="role user">Permissions</span></a>'; }
     ],
     [
         'class' => ActionColumn::className(),
@@ -64,7 +67,7 @@ $columns =  [
         'buttons' => [
             'update'=> function ($url,$model) {
                 return CommonHtml::button([
-                    'module'=>MANAGE_USER_ROLES,
+                    'module'=>MANAGE_ADMIN_USERS,
                     'action'=>'edit',
                     'url'=>$url,
                     'class'=>'item',
@@ -73,7 +76,7 @@ $columns =  [
             },
             'delete'=> function ($url,$model) {
                 return CommonHtml::button([
-                    'module'=>MANAGE_USER_ROLES,
+                    'module'=>MANAGE_ADMIN_USERS,
                     'action'=>'delete',
                     'url'=>$url,
                     'class'=>'item',

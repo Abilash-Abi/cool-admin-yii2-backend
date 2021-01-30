@@ -102,9 +102,29 @@ $this->registerJsFile('@web/backend/web/files/vendor/jquery-3.2.1.min.js');
                             <div class="col-md-12">
                                 <div class="overview-wrap">
                                     <h2 class="title-1"><?=$this->title?></h2>
-                            </div>
+                                    <?= Breadcrumbs::widget([
+                                'homeLink' => [ 
+                                    'label'=>'<i class="fa fa-home"></i>
+                                                                
+                                    &nbsp;Dashboard&nbsp;<i class="fa fa-angle-right"></i>',
+                                    'url' => Yii::$app->homeUrl,
+                                ],
+                                        'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+                                        'encodeLabels' => false,
+                                'options' => [
+                                    'class' => 'breadcrumb pull-right',
+                                ],
+                                    ]);
+                            ?>         
+                                </div>
+                                                   
                         </div>
+                        <?=Yii::$app->controller->renderpartial('@app/views/layouts/_alert_message'); ?>
+
                         <?=$content?>
+                        
+                        </div>
+                    </div>
                         <?=Yii::$app->controller->renderpartial('@app/views/layouts/_footer'); ?>
                     </div>
                 </div>
