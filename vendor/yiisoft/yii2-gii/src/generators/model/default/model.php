@@ -60,12 +60,11 @@ class <?= $className ?> extends <?= '\\' . ltrim($generator->baseClass, '\\') . 
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
-                $model->modified_by = Yii::$app->user->getId();
-                $model->modified_ip = Yii::$app->getRequest()->getUserIP();	
+                $this->modified_by = Yii::$app->user->getId();
+                $this->modified_ip = Yii::$app->getRequest()->getUserIP();	
             if ($this->isNewRecord) {
-                $this->status = self::STATUS_ACTIVE;
-                $model->created_by = Yii::$app->user->getId();
-                $model->created_ip = Yii::$app->getRequest()->getUserIP();
+                $this->created_by = Yii::$app->user->getId();
+                $this->created_ip = Yii::$app->getRequest()->getUserIP();
                
             }
             return true;
