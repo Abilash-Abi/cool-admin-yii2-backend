@@ -28,7 +28,7 @@ class SiteController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index','listing'],
+                        'actions' => ['logout', 'index','listing','update-status'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -205,4 +205,17 @@ class SiteController extends Controller
             'model' => $model
         ]);
     } 
+
+    public function actionUpdateStatus(){
+        $id = Yii::$app->request->post('id');
+        $class = Yii::$app->request->post('model');
+        $status = Yii::$app->request->post('status');
+        $model = $class::find()->where(['id'=>$id])->one();
+        if(!empty($model)) {
+            $model->status = $status;
+            $model->save(false);
+            return 1;
+        }
+        return 0;
+    }
 }
