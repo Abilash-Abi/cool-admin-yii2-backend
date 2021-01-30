@@ -23,7 +23,7 @@ $formElements = [
     [
         'type'=>'text',
         'field'=>'email',
-        'hint'=>'Passwod will auto generate and sent to the email address.',
+        'hint'=> $model->isNewRecord ? 'Passwod will auto generate and sent to the email address.' : '',
     ],
     [
         'type'=>'dropdown',

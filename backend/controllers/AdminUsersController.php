@@ -4,7 +4,6 @@ namespace backend\controllers;
 
 use Yii;
 use yii\web\Controller;
-use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\components\PermissionControl;
 
@@ -19,7 +18,7 @@ use common\libraries\Common;
 use common\libraries\Db;
 use yii\helpers\ArrayHelper;
 
-class AdminUsersController extends \yii\web\Controller
+class AdminUsersController extends Controller
 {
 	public $roleNames;
     public function behaviors()
@@ -43,7 +42,7 @@ class AdminUsersController extends \yii\web\Controller
 							'module'=>MANAGE_USER_ROLES,
 							'actions'=>[
 											'index'=>'view',
-											'create'=>'adda',
+											'create'=>'add',
 											'update'=>'edit',
 											'delete'=>'add',
 										]
@@ -66,7 +65,7 @@ class AdminUsersController extends \yii\web\Controller
     }
 
 
-    public function actionIndex($search='',$status='', $role='')
+    public function actionIndex($search='',$status='', $role='',$export='')
     {
         $filterDesc = "";
         $search = trim($search);
@@ -87,11 +86,12 @@ class AdminUsersController extends \yii\web\Controller
 		}			
 		$rolesArr = AdminRoles::getRolesHideList(HIDE_ROLE_LIST);	
 		$countQuery = clone $query;
-		$pages = new Pagination(['totalCount' => $countQuery->count(),'pageSize'=>Yii::$app->params['pageLimit']]);
 		
-		$posts = $query->offset($pages->offset)
-			->limit(Yii::$app->params['pageLimit'])
-			->all();
+
+		if($export){
+			$filterQuery = clone $query;
+			$this->export($filterQuery->all());
+		}
 
 		return $this->render('index', [
 			 'posts' => $query,
@@ -99,6 +99,28 @@ class AdminUsersController extends \yii\web\Controller
 		]);
     }
 
+
+	public function export($model){
+		$res = $headings =[];
+		if(!empty($model)){
+			$slNo=0;
+			foreach($model as $modelObject){
+				$data['#'] = ++$slNo;
+				$data['Name'] = $modelObject->name;
+				$data['Email'] = $modelObject->email;
+				$data['Role'] = $modelObject->adminRole->role_name;
+				$data['Status'] = $modelObject->status;
+
+
+				$res[]=$data;
+			}
+			$headings = array_keys($res[0]);
+			Common::excelExport($headings,$res,['file'=>'Admin_Users','excelName'=>'Admin Users']);		
+		}else{
+			CommonHtml::flashError('exportError');
+
+		}
+	}
 
     /**
 	 * Create Admin Users
@@ -108,11 +130,34 @@ class AdminUsersController extends \yii\web\Controller
         if ($model->load(Yii::$app->request->post()) ) {
 			
 			if($model->validate() && $model->createAdminUser()){
-				Yii::$app->session->setFlash(SUCCESS, Yii::t(USER_ALERETS,'userCreate',[NAME=>$model->name]));
+				CommonHtml::flashSuccess('adminUserCreate',['name'=>$model->name]);
 				 return $this->redirect($this->returnUrl);
 			}
 		}        
         return $this->render('form',[MODEL=>$model]);
+	}
+
+	//Update Admin user
+	public function actionUpdate($id=0){			
+		$model = Db::getModel(AdminUsers::class,['id'=>$id]);
+        if ($model->load(Yii::$app->request->post()) ) {			
+			if($model->save()){
+				CommonHtml::flashSuccess('adminUserUpdate',['name'=>$model->name]);
+				 return $this->redirect($this->returnUrl);
+			}
+		}        
+        return $this->render('form',[MODEL=>$model]);
+	}
+
+	/**
+	 * Delelet Admin user
+	 */
+	public function actionDelete($id=0){
+		$model = Db::getModel(AdminUsers::class,['id'=>$id]);
+		if($model->delete()){
+			CommonHtml::flashSuccess('adminUserDelete',['name'=>$model->name]);
+		}
+		return $this->redirect($this->returnUrl);
 	}
 
 }

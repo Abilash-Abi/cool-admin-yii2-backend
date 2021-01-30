@@ -75,7 +75,9 @@ class AppAsset extends AssetBundle
         ];
 
         $needConfirm = [
-            'user-roles/index'
+            'user-roles/index',
+            'admin-users/index',
+
         ];
 
          // Toast Select picker js and css

@@ -7,6 +7,7 @@ use common\libraries\CommonHtml;
 
     <div class="table-data__tool">
     <div class="table-data__tool-left">
+    <div class="row">
 
         <?php 
         if(!empty($filterElements['fields'])) {
@@ -18,10 +19,19 @@ use common\libraries\CommonHtml;
 
 
                 switch($type) {
-                    case 'selectBox';
+
+                    case  'text':
+                        $placeholder = $elements['placeholder'] ?? $elements['placeholder'] ?? '';
+
+                        echo '<div class="row form-group">
+                        <div class="col col-sm-6">
+                            <input type="text" value="'.@$_GET[$name].'" placeholder="'.$placeholder.'" name="'.$name.'"  id="'.$name.'" class="form-control">
+                        </div>
+                    </div>';
+                        break;
+                    case 'dropdown';
                     $values = $elements['values'];
                     $prompt = $elements['prompt'];
-
                     echo '<div class="rs-select2--light rs-select2--md">';
                     echo Html::dropDownList($name,[@$_GET[$name]],$values,['class'=>'js-select2 submit-form','prompt'=>$prompt]);
                     echo '<div class="dropDownSelect2"></div></div>';
@@ -38,6 +48,7 @@ use common\libraries\CommonHtml;
             ActiveForm::end();
         }
             ?>
+            </div>
                         </div>
 
 

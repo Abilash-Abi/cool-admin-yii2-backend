@@ -28,7 +28,7 @@ $provider = new ActiveDataProvider([
     $filterElements = [
         'fields'=>[
                 [
-                    'type'=>'selectBox',
+                    'type'=>'dropdown',
                     'name'=>'status',
                     'prompt'=>'Select Status',
                     'values'=> ['Active'=>'Active','Inactive'=>'Inactive']
@@ -76,7 +76,7 @@ $columns =  [
                     'module'=>MANAGE_USER_ROLES,
                     'action'=>'delete',
                     'url'=>$url,
-                    'class'=>'item',
+                    'class'=>'item confirm-delete',
                     'label'=>'<i class="zmdi zmdi-delete"></i>',
                 ]);
 

@@ -6,5 +6,11 @@ return [
     'privileges'  => 'Role Privileges are updated successfully.',
     'exportError' => 'No record found to export.',
 
+    'adminUserCreate'=>'Admin User has been created successfully.',
+    'adminUserUpdate'=>'Admin User has been updated successfully.',
+    'adminUserDelete'=>'Admin User has been deleted successfully.',
+
+
+
 
 ];
