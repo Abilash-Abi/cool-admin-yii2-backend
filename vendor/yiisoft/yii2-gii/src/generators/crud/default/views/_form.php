@@ -13,30 +13,34 @@ if (empty($safeAttributes)) {
     $safeAttributes = $model->attributes();
 }
 
+
 echo "<?php\n";
 ?>
+use yii\helpers\Url;
+use common\libraries\CommonHtml;
 
-use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+$this->title = <?= $generator->generateString(Inflector::camel2words(StringHelper::basename($generator->modelClass))) ?>;
+$this->params['breadcrumbs'][] =  CommonHtml::bl(<?= $generator->generateString(Inflector::pluralize(Inflector::camel2words(StringHelper::basename($generator->modelClass)))) ?>,Url::to(['index']));
+$this->params['breadcrumbs'][] =  $model->isNewRecord ? 'Add' : 'Update';;
 
 /* @var $this yii\web\View */
 /* @var $model <?= ltrim($generator->modelClass, '\\') ?> */
 /* @var $form yii\widgets\ActiveForm */
-?>
 
-<div class="<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>-form">
-
-    <?= "<?php " ?>$form = ActiveForm::begin(); ?>
-
+$formElements = [
 <?php foreach ($generator->getColumnNames() as $attribute) {
     if (in_array($attribute, $safeAttributes)) {
-        echo "    <?= " . $generator->generateActiveField($attribute) . " ?>\n\n";
+        echo " 
+        [
+            'type'=>'text',
+            'field'=>'$attribute',
+        ],\n";
     }
-} ?>
-    <div class="form-group">
-        <?= "<?= " ?>Html::submitButton(<?= $generator->generateString('Save') ?>, ['class' => 'btn btn-success']) ?>
-    </div>
+}
 
-    <?= "<?php " ?>ActiveForm::end(); ?>
 
-</div>
+?>
+];
+echo Yii::$app->controller->renderPartial("@app/views/render-partials/form_elements",compact('model','formElements'));
+
+

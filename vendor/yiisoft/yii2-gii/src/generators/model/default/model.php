@@ -20,7 +20,8 @@ echo "<?php\n";
 namespace <?= $generator->ns ?>;
 
 use Yii;
-
+use yii\db\Expression;
+use yii\behaviors\TimestampBehavior;
 /**
  * This is the model class for table "<?= $generator->generateTableName($tableName) ?>".
  *
@@ -43,6 +44,36 @@ class <?= $className ?> extends <?= '\\' . ltrim($generator->baseClass, '\\') . 
     {
         return '<?= $generator->generateTableName($tableName) ?>';
     }
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_on',
+                'updatedAtAttribute' => 'modified_on',
+                'value' => new Expression('NOW()'),
+            ],
+        ];
+    }
+
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+                $model->modified_by = Yii::$app->user->getId();
+                $model->modified_ip = Yii::$app->getRequest()->getUserIP();	
+            if ($this->isNewRecord) {
+                $this->status = self::STATUS_ACTIVE;
+                $model->created_by = Yii::$app->user->getId();
+                $model->created_ip = Yii::$app->getRequest()->getUserIP();
+               
+            }
+            return true;
+        }
+        return false;
+    }
+
+
 <?php if ($generator->db !== 'db'): ?>
 
     /**
@@ -99,4 +130,15 @@ class <?= $className ?> extends <?= '\\' . ltrim($generator->baseClass, '\\') . 
         return new <?= $queryClassFullName ?>(get_called_class());
     }
 <?php endif; ?>
+
+
+/**
+    *Validate And save Model
+ */
+ public function save<?=$className?>() {
+     if(!$this->validate()){
+         return false;
+     }
+     return $this->save();
+ }
 }

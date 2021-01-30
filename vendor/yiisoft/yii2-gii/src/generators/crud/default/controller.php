@@ -125,7 +125,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
     }
 
     /**
-    Export listing data as excel 
+    * Export listing data as excel 
      */
     public function export($model){
 		$res = $headings =[];
@@ -166,7 +166,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
 				CommonHtml::flashSuccess('<?=lcfirst($modelClass)?>Create',['name'=>$model->name]);
 				 return $this->redirect($this->returnUrl);
 		}        
-        return $this->render('form',[MODEL=>$model]);
+        return $this->render('_form',[MODEL=>$model]);
 	}
 
     /**
@@ -196,7 +196,7 @@ if (count($pks) === 1) {
 				 return $this->redirect($this->returnUrl);
 		}   
 
-        return $this->render('form', [
+        return $this->render('_form', [
             'model' => $model,
         ]);
     }
