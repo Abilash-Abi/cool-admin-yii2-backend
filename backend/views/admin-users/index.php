@@ -7,7 +7,7 @@ use yii\data\ActiveDataProvider;
 use yii\grid\ActionColumn;
 use yii\helpers\Html;
 use common\libraries\CommonHtml;
-use common\models\AdminRoles;
+use common\models\AdminUsers;
 $this->title = 'Admin Users';
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -52,13 +52,13 @@ $columns =  [
     ],
     [
         'label'=>'Role',
-        'value'=>'adminRoles.name'
+        'value'=>'adminRole.role_name'
     ],
  
     [
         'label'=>'status',
         'format'=>'raw',
-        'value'=>function($model) { return CommonHtml::statusButton($model->status,$model->id,AdminRoles::class); }
+        'value'=>function($model) { return CommonHtml::statusButton($model->status,$model->id,AdminUsers::class); }
     ],
     [
         'class' => ActionColumn::className(),

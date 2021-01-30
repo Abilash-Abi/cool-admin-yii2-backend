@@ -6,12 +6,15 @@ use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+use common\libraries\Common;
+use common\components\BackendEmails;
+
 
 /**
  * User model
  *
  * @property integer $id
- * @property string $username
+ * @property string $email
  * @property string $password_hash
  * @property string $password_reset_token
  * @property string $verification_token
@@ -24,6 +27,7 @@ use yii\web\IdentityInterface;
  */
 class AdminUsers extends ActiveRecord implements IdentityInterface
 {
+    public $password;
     const STATUS_DELETED = 0;
     const STATUS_INACTIVE = 'Inactive';
     const STATUS_ACTIVE = 'Active';
@@ -31,8 +35,10 @@ class AdminUsers extends ActiveRecord implements IdentityInterface
     {
         if (parent::beforeSave($insert)) {
             if ($this->isNewRecord) {
+                $this->status = self::STATUS_ACTIVE;
+                $this->password = Common::randomPassword();
                 $this->auth_key = \Yii::$app->security->generateRandomString();
-                $this->password_hash = \Yii::$app->security->generateRandomString();
+                $this->setPassword($this->password);
             }
             return true;
         }
@@ -63,9 +69,15 @@ class AdminUsers extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['name','mobile','username','role_id'],'required'],
+            [['name','mobile','email','role_id'],'required'],
             [['name'],'string','max'=>20],
-            [['mobile'],'number'],
+            [['reset_otp_expired_on'],'safe'],
+            ['email','email'],
+            ['email','unique'],
+
+            [['mobile','otp'],'number'],
+            ['name','match','pattern'=>REGX_NAME],
+            [['mobile'],  'match', 'pattern'=>REGX_MOBILE, 'message' => MSG_MOBILE],
             ['status', 'default', 'value' => self::STATUS_INACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
         ];
@@ -73,7 +85,7 @@ class AdminUsers extends ActiveRecord implements IdentityInterface
 
     public function attributeLabels(){
         return [
-            'username'=>'Email',
+            'email'=>'Email',
             'role_id'=>'Role',
         ];
     }
@@ -95,14 +107,14 @@ class AdminUsers extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Finds user by username
+     * Finds user by email
      *
-     * @param string $username
+     * @param string $email
      * @return static|null
      */
-    public static function findByUsername($username)
+    public static function findByUsername($email)
     {
-        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
+        return static::findOne(['email' => $email, 'status' => self::STATUS_ACTIVE]);
     }
 
     /**
@@ -235,7 +247,11 @@ class AdminUsers extends ActiveRecord implements IdentityInterface
     }
 
     public function createAdminUser(){
-        return $this->save();
+    
+        if($this->save()){
+            BackendEmails::adminLoginCredentials($this->email,$this->email,$this->password,$this->name,'create');
+        }
+        
 
     }
 }

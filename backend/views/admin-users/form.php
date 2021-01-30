@@ -12,7 +12,7 @@ $this->params['breadcrumbs'][] = CommonHtml::bl($this->title,Url::to(['user-role
 $this->params['breadcrumbs'][] = $model->isNewRecord ? 'Add' : 'Update';
 
 $formElements = [
-    [
+    [ 
         'type'=>'text',
         'field'=>'name',
     ],
@@ -22,8 +22,8 @@ $formElements = [
     ],
     [
         'type'=>'text',
-        'field'=>'username',
-        'placeholder'=>'Email',
+        'field'=>'email',
+        'hint'=>'Passwod will auto generate and sent to the email address.',
     ],
     [
         'type'=>'dropdown',

@@ -70,7 +70,8 @@ class AppAsset extends AssetBundle
         $route = Yii::$app->controller->route;
 
         $needToast = [
-            'user-roles/index'
+            'user-roles/index',
+            'admin-users/index'
         ];
 
         $needConfirm = [

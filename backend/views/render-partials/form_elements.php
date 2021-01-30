@@ -18,10 +18,13 @@ use yii\bootstrap\ActiveForm;
                         $type = !empty($elements['type']) ? $elements['type'] : 'text';
                         $field = !empty($elements['field']) ? $elements['field'] : 'text';
                         $placeholder = !empty($elements['placeholder']) ? $elements['placeholder'] : ucfirst($field);
+                        $hint = !empty($elements['hint']) ? $elements['hint'] : '';
+
 
                         switch($type) {
                             case 'text': 
-                                echo $form->field($model, $field,[TEMPLATE=>FORM_TEMPLATE,'options'=>FORM_OPTIONS])->textInput(['autofocus' => true,'placeholder'=>$placeholder]);
+                                echo $form->field($model, $field,[TEMPLATE=>FORM_TEMPLATE,'options'=>FORM_OPTIONS])->textInput(['autofocus' => true,'placeholder'=>$placeholder])
+                                ->hint($hint);
                                 break;
                             case 'dropdown':
                                 $options = $elements['options'] ?? $elements['options'] ?? [];

@@ -4,7 +4,7 @@ namespace backend\models;
 use yii\base\InvalidArgumentException;
 use yii\base\Model;
 use Yii;
-use common\models\User;
+use common\models\AdminUsers;
 
 /**
  * Password reset form
@@ -13,10 +13,12 @@ class ResetPasswordForm extends Model
 {
     public $password;
     public $re_password;
+    public $otp;
+
 
 
     /**
-     * @var \common\models\User
+     * @var \common\models\AdminUsers
      */
     private $_user;
 
@@ -33,7 +35,7 @@ class ResetPasswordForm extends Model
         if (empty($token) || !is_string($token)) {
             throw new InvalidArgumentException('Password reset token cannot be blank.');
         }
-        $this->_user = User::findByPasswordResetToken($token);
+        $this->_user = AdminUsers::findByPasswordResetToken($token);
         if (!$this->_user) {
             throw new InvalidArgumentException('Wrong password reset token.');
         }
@@ -46,9 +48,23 @@ class ResetPasswordForm extends Model
     public function rules()
     {
         return [
-            [['password','re_password'], 'required'],
+            [['password','re_password','otp'], 'required'],
+            [['otp'],'number'],
+            ['otp','validateOTP'],
             ['re_password', 'compare', 'compareAttribute'=>'password', 'message'=>"Passwords don't match" ],
             ['password', 'string', 'min' => Yii::$app->params['user.passwordMinLength']],
+        ];
+    }
+
+    public function validateOTP(){
+        if($this->_user->otp != $this->otp){
+            $this->addError('otp','Invalid OTP');
+        }
+    }
+
+    public function attributeLabels(){
+        return [
+            'otp'=>'OTP',
         ];
     }
 

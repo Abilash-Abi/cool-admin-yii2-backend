@@ -38,6 +38,20 @@ return [
             'errorAction' => 'site/error',
         ],
 
+        'mailer' => [
+            'class' => 'yii\swiftmailer\Mailer',
+            'viewPath' => '@common/mail',
+            'useFileTransport' => false,
+            'transport' => [
+                'class' => 'Swift_SmtpTransport',
+                'host' => 'smtp.gmail.com',
+                'username' => 'buildyourwebapp@gmail.com',
+                'password' => 'qaetesatbcegmekm', 
+                'port' => '587',
+                'encryption' => 'tls',
+            ],
+        ],
+
         'i18n' => [
             'translations' => [             
                 'users*' => [

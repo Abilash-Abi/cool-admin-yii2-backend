@@ -7,12 +7,13 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
-$this->title = 'Login';
+$this->title = 'Change Password';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <?php 
     $form = ActiveForm::begin(['id' => 'login-form']);
+    echo $form->field($model, 'otp')->passwordInput(['autofocus' => true,'placeholder'=>'Passsword','class'=>'au-input au-input--full']);
     
     echo $form->field($model, 'password')->passwordInput(['autofocus' => true,'placeholder'=>'Passsword','class'=>'au-input au-input--full']);
     echo $form->field($model, 're_password')->passwordInput(['autofocus' => true,'placeholder'=>'Passsword','class'=>'au-input au-input--full']);

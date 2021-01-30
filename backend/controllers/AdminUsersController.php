@@ -43,7 +43,7 @@ class AdminUsersController extends \yii\web\Controller
 							'module'=>MANAGE_USER_ROLES,
 							'actions'=>[
 											'index'=>'view',
-											'create'=>'add',
+											'create'=>'adda',
 											'update'=>'edit',
 											'delete'=>'add',
 										]
