@@ -75,7 +75,7 @@ class CategoryController extends Controller
 
       
         $query->andFilterWhere(['status'=>Common::param('status')]);
-        $query->andFilterWhere(['LIKE','search',Common::param('search')]);
+        $query->andFilterWhere(['LIKE','name',Common::param('search')]);
 
 
         if(Common::param('export')){

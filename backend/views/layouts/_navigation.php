@@ -3,6 +3,7 @@ use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\widgets\Menu;
 use common\components\PermissionControl;
+use backend\libraries\DefaultHtml;
 const MAIN_MENU_TEMPLATE =  "\n<ul class='list-unstyled navbar__sub-list js-sub-list'>\n{items}\n</ul>\n";
 const SUB_MENU_TEMPLATE ='<a class="js-arrow" href="{url}">{label}<span class="arrow"><i class="fas fa-angle-down"></i></span></a>';
 
@@ -48,36 +49,6 @@ $navigations = [
 ];
 
 
-
-
-$menuWidget =[];
-
-//This loop return navigation detail to menu widget
-$outerCount=0;
-foreach($navigations as $navigation) {
-    $menuWidget[$outerCount]['label'] = sprintf(MENU_LABEL,$navigation['icon'],$navigation['label']);
-    $menuWidget[$outerCount]['url'] = $navigation['url'];
-    $menuWidget[$outerCount]['active'] = in_array($this->context->route,$navigation['active']);
-    $menuWidget[$outerCount]['visible'] = $navigation['visible'];
-
-
-    if(!empty($navigation['submenu'])) {
-        $menuWidget[$outerCount]['template'] = SUB_MENU_TEMPLATE;
-        $menuWidget[$outerCount]['options'] = ['class'=>'has-sub'];
-        $innerCount =0;
-        foreach($navigation['submenu'] as $submenu){
-            $menuWidget[$outerCount]['items'][$innerCount]['label'] = sprintf(MENU_LABEL,$submenu['icon'],$submenu['label']);
-            $menuWidget[$outerCount]['items'][$innerCount]['url'] = $submenu['url'];
-            $menuWidget[$outerCount]['items'][$innerCount]['active'] = in_array($this->context->route,$navigation['active']);
-            $menuWidget[$outerCount]['items'][$innerCount]['visible'] = $submenu['visible'];
-            $innerCount++;
-        }
-    }
-    $outerCount++;
-}
-
-// echo '<pre>';    
-// print_r($menuWidget);die;
 ?>
 <div class = 'logo'>
     <a href = '#'>
@@ -88,7 +59,7 @@ foreach($navigations as $navigation) {
     <nav class = 'navbar-sidebar2'>
         <?php
         echo Menu::widget( [
-        'items'=>$menuWidget,
+        'items'=>DefaultHtml::navigation($navigations,$this->context->route),
             'options' => [
                 'class' => 'list-unstyled navbar__list',
             ],

@@ -114,7 +114,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
 
       
         $query->andFilterWhere(['status'=>Common::param('status')]);
-        $query->andFilterWhere(['LIKE','search',Common::param('search')]);
+        $query->andFilterWhere(['LIKE','name',Common::param('search')]);
 
 
         if(Common::param('export')){

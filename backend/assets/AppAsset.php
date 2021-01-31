@@ -69,31 +69,21 @@ class AppAsset extends AssetBundle
     public function __construct(){
         $route = Yii::$app->controller->route;
 
-        $needToast = [
-            'user-roles/index',
-            'admin-users/index'
-        ];
-
-        $needConfirm = [
+        $needToastAndConfirm = [
             'user-roles/index',
             'admin-users/index',
             'category/index',
-
         ];
 
-         // Toast Select picker js and css
-         if(in_array($route,$needToast)){
-            $this->css[] = 'css/jquery.toast.min.css';
-            
-            $this->js[] = 'js/jquery.toast.min.js';
-            $this->js[] = 'js/toast.js';
-        }
-
+    
          // Confirm Select picker js and css
-         if(in_array($route,$needConfirm)){
+         if(in_array($route,$needToastAndConfirm)){
+            $this->css[] = 'css/jquery.toast.min.css';
             $this->css[] = 'css/jquery-confirm.min.css';
             
             $this->js[] = 'js/jquery-confirm.min.js';
+            $this->js[] = 'js/jquery.toast.min.js';
+            $this->js[] = 'js/toast.js';
         }
     
     }
