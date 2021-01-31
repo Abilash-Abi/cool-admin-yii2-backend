@@ -13,11 +13,12 @@ class m210126_053445_insert_admin_user_data extends Migration
     public function safeUp()
     {
         $this->insert('{{%admin_users}}',[
-            'username'=>'admin@yopmail.com',
+            'name'=>'Super Admin',
+            'mobile'=>'9876543210',
             'password_hash'=>'$2y$13$9qmCsSOxiOr8EoGNhY6kfeW6KwrcsB8l0H17oCcoet9Q6AAe4NLLW',
             'auth_key'=>'',
             'email'=>'admin@yopmail.com', 
-            'status'=>'10',
+            'status'=>'Active',
             'created_at'=>'12345678',
             'updated_at'=>'12345678',
             'role_id'=>'1',
