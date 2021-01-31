@@ -23,6 +23,7 @@ use yii\helpers\ArrayHelper;
  */
 class CategoryController extends Controller
 {
+    public $permissionModule;
     public function behaviors()
     {
 		
@@ -41,7 +42,7 @@ class CategoryController extends Controller
 			'permission' =>[
 				'class'=>PermissionControl::className(),
 				'rules'=>[
-							'module'=>'',
+							'module'=>MANAGE_CATEGORY,
 							'actions'=>[
 											'index'=>'view',
 											'create'=>'add',
@@ -59,8 +60,8 @@ class CategoryController extends Controller
         if (!parent::beforeAction($action)) {
             return false;
 		}
-	
-		$this->indexUrl = Url::to(['']);
+        $this->permissionModule = MANAGE_CATEGORY;
+		$this->indexUrl = Url::to(['index']);
 		$this->user_id = Yii::$app->user->identity->id;
         return true;
     }
@@ -68,14 +69,19 @@ class CategoryController extends Controller
      * Lists all Category models.
      * @return mixed
      */
-    public function actionIndex($export='')
+    public function actionIndex()
     {
         $query = Category::find();
 
-        if($export){
+      
+        $query->andFilterWhere(['status'=>Common::param('status')]);
+        $query->andFilterWhere(['LIKE','search',Common::param('search')]);
+
+
+        if(Common::param('export')){
 			$filterQuery = clone $query;
 			$this->export($filterQuery->all());
-		}
+        }
 
         
         return $this->render('index', [
@@ -121,7 +127,7 @@ class CategoryController extends Controller
      */
     public function actionCreate(){			
         $model   =  new Category();
-        if ($model->load(Yii::$app->request->post() && $model->saveCategory()) ) {
+        if ($model->load(Yii::$app->request->post()) && $model->saveCategory() ) {
 				CommonHtml::flashSuccess('categoryCreate',['name'=>$model->name]);
 				 return $this->redirect($this->returnUrl);
 		}        
@@ -137,9 +143,9 @@ class CategoryController extends Controller
      */
     public function actionUpdate($id)
     {
-        		$model = Db::getModel(Category::class,['id'=>$id]);
+        $model = Db::getModel(Category::class,['id'=>$id]);
 
-        if ($model->load(Yii::$app->request->post() && $model->saveCategory()) ) {
+        if ($model->load(Yii::$app->request->post()) && $model->saveCategory() ) {
 				CommonHtml::flashSuccess('categoryUpdate',['name'=>$model->name]);
 				 return $this->redirect($this->returnUrl);
 		}   

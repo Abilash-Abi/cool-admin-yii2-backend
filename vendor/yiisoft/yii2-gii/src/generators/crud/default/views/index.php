@@ -36,6 +36,8 @@ $dataProvider = new ActiveDataProvider([
     'sort' =>false,
 
 ]);
+
+$manageModule = MANAGE;
 ?>
 <div class="col-md-12 m-t-25">
 <?='<?php '?>
@@ -44,7 +46,7 @@ $filterElements = [
             [
                 'type'=>'text',
                 'name'=>'search',
-                'placeholder'=>'Name / Email',
+                'placeholder'=>'Name',
             ],
                 [
                     'type'=>'dropdown',
@@ -57,6 +59,9 @@ $filterElements = [
 echo Yii::$app->controller->renderPartial('@app/views/render-partials/_filter_section',compact('filterElements'));
 
 $columns  = [
+                [
+                 'class' => 'yii\grid\SerialColumn',
+                ],
 <?php
 $count = 0;
 if (($tableSchema = $generator->getTableSchema()) === false) {
@@ -79,9 +84,17 @@ if (($tableSchema = $generator->getTableSchema()) === false) {
     foreach ($tableSchema->columns as $column) {
         $format = $generator->generateColumnFormat($column);
         if (++$count < 6) {
-            echo "            '" . $column->name . ($format === 'text' ? "" : ":" . $format) . "',\n";
-        } else {
-            echo "            //'" . $column->name . ($format === 'text' ? "" : ":" . $format) . "',\n";
+            if( $column->name=='status'){
+                echo '
+                [
+                    \'label\'=>\'status\',
+                    \'format\'=>\'raw\',
+                    \'value\'=>function($model) { return CommonHtml::statusButton($model->status,$model->id,'.$generator->modelClass.'::class); }
+                ],
+                ';
+            }else{
+                echo "            '" . $column->name . "',\n";
+            }
         }
     }
 }
@@ -94,7 +107,7 @@ if (($tableSchema = $generator->getTableSchema()) === false) {
         'buttons' => [
             'update'=> function ($url,$model) {
                 return CommonHtml::button([
-                    'module'=>MANAGE_ADMIN_USERS,
+                    'module'=>$manageModule,
                     'action'=>'edit',
                     'url'=>$url,
                     'class'=>'item',
@@ -103,7 +116,7 @@ if (($tableSchema = $generator->getTableSchema()) === false) {
             },
             'delete'=> function ($url,$model) {
                 return CommonHtml::button([
-                    'module'=>MANAGE_ADMIN_USERS,
+                    'module'=>$manageModule,
                     'action'=>'delete',
                     'url'=>$url,
                     'class'=>'item confirm-delete',

@@ -77,6 +77,7 @@ class AppAsset extends AssetBundle
         $needConfirm = [
             'user-roles/index',
             'admin-users/index',
+            'category/index',
 
         ];
 

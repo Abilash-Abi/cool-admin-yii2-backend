@@ -21,10 +21,16 @@ const MENU_LABEL = '<i class="%s"></i>%s';
 
  $adminUsers = PermissionControl::isAllowed(MANAGE_ADMIN_USERS,'view');
  $adminUserRoles = PermissionControl::isAllowed(MANAGE_USER_ROLES,'view');
+ $manageCategory = PermissionControl::isAllowed(MANAGE_CATEGORY,'view');
+
 $navigations = [
     [
         'label'=>'Dashboard', 'icon'=>'fas fa-tachometer-alt', 'url'=>'#','visible'=>1,
             'active'=>['site/login'],
+    ],
+    [
+        'label'=>'Category', 'icon'=>'fas fa-list', 'url'=>['category/index'],'visible'=>$manageCategory,
+            'active'=>['category/index','category/create','category/update'],
     ],
     [
         'label'=>'Admin Users', 'icon'=>'fas fa-users', 'url'=>'#','visible'=>$adminUsers || $adminUserRoles,

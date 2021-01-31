@@ -9,8 +9,10 @@ return [
     'adminUserCreate'=>'Admin User has been created successfully.',
     'adminUserUpdate'=>'Admin User has been updated successfully.',
     'adminUserDelete'=>'Admin User has been deleted successfully.',
-
-
+    
+    'categoryCreate' => 'Category has been created successfully.',
+    'categoryUpdate' => 'Category has been updated successfully.',
+    'categoryDelete' => 'Category has been deleted successfully.',
 
 
 ];

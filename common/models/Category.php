@@ -63,6 +63,10 @@ class Category extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['name'],'required'],
+            ['name','unique'],
+            ['name','match','pattern'=>REGX_NAME,'message'=>MSG_NAME],
+
             [['created_on', 'modified_on'], 'safe'],
             [['created_by', 'modified_by'], 'integer'],
             [['name', 'status'], 'string', 'max' => 20],

@@ -29,7 +29,7 @@ $dataProvider = new ActiveDataProvider([
             [
                 'type'=>'text',
                 'name'=>'search',
-                'placeholder'=>'Name / Email',
+                'placeholder'=>'Name',
             ],
                 [
                     'type'=>'dropdown',
@@ -42,15 +42,16 @@ $dataProvider = new ActiveDataProvider([
 echo Yii::$app->controller->renderPartial('@app/views/render-partials/_filter_section',compact('filterElements'));
 
 $columns  = [
-            'id',
+              [
+                'class' => 'yii\grid\SerialColumn',
+              ],
             'name',
-            'status',
-            'created_on',
-            'created_by',
-            //'created_ip',
-            //'modified_on',
-            //'modified_by',
-            //'modified_ip',
+
+                [
+                    'label'=>'status',
+                    'format'=>'raw',
+                    'value'=>function($model) { return CommonHtml::statusButton($model->status,$model->id,common\models\Category::class); }
+                ],
 
 [
         'class' => ActionColumn::className(),
@@ -59,7 +60,7 @@ $columns  = [
         'buttons' => [
             'update'=> function ($url,$model) {
                 return CommonHtml::button([
-                    'module'=>MANAGE_ADMIN_USERS,
+                    'module'=>$this->context->permissionModule,
                     'action'=>'edit',
                     'url'=>$url,
                     'class'=>'item',
@@ -68,7 +69,7 @@ $columns  = [
             },
             'delete'=> function ($url,$model) {
                 return CommonHtml::button([
-                    'module'=>MANAGE_ADMIN_USERS,
+                    'module'=>$this->context->permissionModule,
                     'action'=>'delete',
                     'url'=>$url,
                     'class'=>'item confirm-delete',

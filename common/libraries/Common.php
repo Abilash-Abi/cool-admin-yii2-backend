@@ -1,6 +1,6 @@
 <?php
 namespace common\libraries;	
-
+use Yii;
 class Common {
     public static function excelExport(array $headings=[], array $data=[],  array $others=[]) {
         $fileName = !empty($others['file']) ? $others['file'] : 'Excel';
@@ -38,6 +38,13 @@ class Common {
 				$pass[] = $alphabet[$n];
 			}
 			return implode($pass); //turn the array into a string
+	}
+	public static function param($param=''){
+		$queryParam = Yii::$app->request->queryParams;
+		if(!empty($queryParam[$param])) {
+			return $queryParam[$param];
+		}
+		return null;
 	}
 
 }

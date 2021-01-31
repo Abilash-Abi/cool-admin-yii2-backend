@@ -24,7 +24,7 @@ $actionParams = $generator->generateActionParams();
 $actionParamComments = $generator->generateActionParamComments();
 
 echo "<?php\n";
-$indexUrl = '';
+$indexUrl = 'index';
 ?>
 
 namespace <?= StringHelper::dirname(ltrim($generator->controllerClass, '\\')) ?>;
@@ -99,7 +99,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
      * Lists all <?= $modelClass ?> models.
      * @return mixed
      */
-    public function actionIndex($export='')
+    public function actionIndex()
     {
 <?php if (!empty($generator->searchModelClass)): ?>
         $searchModel = new <?= isset($searchModelAlias) ? $searchModelAlias : $searchModelClass ?>();
@@ -112,10 +112,15 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
 <?php else: ?>
         $query = <?=$modelClass?>::find();
 
-        if($export){
+      
+        $query->andFilterWhere(['status'=>Common::param('status')]);
+        $query->andFilterWhere(['LIKE','search',Common::param('search')]);
+
+
+        if(Common::param('export')){
 			$filterQuery = clone $query;
 			$this->export($filterQuery->all());
-		}
+        }
 
         
         return $this->render('index', [
@@ -162,7 +167,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
      */
     public function actionCreate(){			
         $model   =  new <?=$modelClass?>();
-        if ($model->load(Yii::$app->request->post() && $model->save<?=$modelClass?>()) ) {
+        if ($model->load(Yii::$app->request->post()) && $model->save<?=$modelClass?>() ) {
 				CommonHtml::flashSuccess('<?=lcfirst($modelClass)?>Create',['name'=>$model->name]);
 				 return $this->redirect($this->returnUrl);
 		}        
@@ -191,7 +196,7 @@ if (count($pks) === 1) {
 ?>
 		$model = Db::getModel(<?=$modelClass?>::class,['id'=><?=$condition?>]);
 
-        if ($model->load(Yii::$app->request->post() && $model->save<?=$modelClass?>()) ) {
+        if ($model->load(Yii::$app->request->post()) && $model->save<?=$modelClass?>() ) {
 				CommonHtml::flashSuccess('<?=lcfirst($modelClass)?>Update',['name'=>$model->name]);
 				 return $this->redirect($this->returnUrl);
 		}   

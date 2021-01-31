@@ -4,6 +4,8 @@ const REGX_NAME = '/^[A-z \s]+$/i';
 const REGX_MOBILE = '/^([+]?([0-9 -]{10,13})+)$/';
 
 const MSG_MOBILE = 'Please enter valid phone number';
+const MSG_NAME = 'Allowed charecters are aphabet and space.';
+
 
 
 const NO_REPLAY_MAIL = 'no-replay@yopmail.com';
@@ -34,3 +36,5 @@ const HIDE_ROLE_LIST = ['Super Admin'];
 
 const MANAGE_USER_ROLES = 'User Roles';
 const MANAGE_ADMIN_USERS = 'Admin Users';
+const MANAGE_CATEGORY = 'Category';
+
